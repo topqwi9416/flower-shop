@@ -46,3 +46,21 @@ Route::get('/debug-railway', function () {
         'url' => config('app.url'),
     ];
 });
+
+Route::get('/debug-filament', function () {
+    try {
+        $panel = \Filament\Facades\Filament::getPanel('admin');
+        return [
+            'panel_found' => true,
+            'panel_path' => $panel->getPath(),
+            'panel_id' => $panel->getId(),
+        ];
+    } catch (\Throwable $e) {
+        return [
+            'panel_found' => false,
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ];
+    }
+});
