@@ -150,6 +150,7 @@
         }
     </style>
     @yield('styles')
+    @livewireStyles
 </head>
 
 <body>
@@ -200,6 +201,7 @@
     </footer>
 
     @yield('scripts')
+    @livewireScripts
 </body>
 
 </html>
