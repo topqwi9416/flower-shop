@@ -136,3 +136,14 @@ Route::get('/debug-panel-check/{secret}', function ($secret) {
         'canAccessPanel' => $user->canAccessPanel($panel),
     ];
 });
+
+Route::get('/debug-routes/{secret}', function ($secret) {
+    if ($secret !== 'myrender2026xyz') abort(404);
+    
+    $routes = collect(\Illuminate\Support\Facades\Route::getRoutes())
+        ->filter(fn($r) => str_contains($r->uri(), 'admin'))
+        ->map(fn($r) => $r->uri())
+        ->values();
+    
+    return $routes;
+});
