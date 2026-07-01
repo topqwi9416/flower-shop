@@ -22,6 +22,7 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+
         return $panel
             ->default()
             ->id('admin')
@@ -57,6 +58,6 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 'panels::head.start',
                 fn () => '<script src="https://cdn.tailwindcss.com"></script>'
-            );
+            );   
     }
 }
