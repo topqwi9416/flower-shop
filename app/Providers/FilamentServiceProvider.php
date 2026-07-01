@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Filament\Support\Assets\Css;
+use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,9 +16,9 @@ class FilamentServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Указываем Filament использовать CDN для ассетов
+        // Отключаем Vite ассеты Filament и включаем CDN
         FilamentAsset::register([
-            // Здесь можно добавить кастомные CSS, если нужно
-        ]);
+            Css::make('app', asset('css/app.css'))->loadedOnRequest(),
+        ], 'filament');
     }
 }
