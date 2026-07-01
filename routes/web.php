@@ -104,3 +104,15 @@ Route::get('/make-me-admin/{secret}', function ($secret) {
     
     return 'Готово, is_admin выставлен для ' . $user->email;
 });
+
+Route::get('/debug-check-admin/{secret}', function ($secret) {
+    if ($secret !== 'myrender2026xyz') {
+        abort(404);
+    }
+    
+    $user = \App\Models\User::find(1);
+    return [
+        'is_admin' => $user->is_admin,
+        'type' => gettype($user->is_admin),
+    ];
+});
