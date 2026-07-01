@@ -22,7 +22,6 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-
         return $panel
             ->default()
             ->id('admin')
@@ -57,8 +56,28 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->renderHook(
                 'panels::head.start',
-                fn () => '<script src="https://cdn.tailwindcss.com"></script>'
-                
-            );   
+                fn () => '
+                    <link rel="preconnect" href="https://fonts.bunny.net">
+                    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
+                    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+                '
+            )
+            ->renderHook(
+                'panels::head.end',
+                fn () => '
+                    <script src="https://cdn.tailwindcss.com"></script>
+                    <script>
+                        tailwind.config = {
+                            theme: {
+                                extend: {
+                                    fontFamily: {
+                                        sans: ["Inter", "sans-serif"],
+                                    },
+                                },
+                            },
+                        }
+                    </script>
+                '
+            );
     }
 }
