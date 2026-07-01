@@ -58,6 +58,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 'panels::head.start',
                 fn () => '<script src="https://cdn.tailwindcss.com"></script>'
+                
             );   
     }
 }
