@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: my-laravel-app
+    env: docker
+    plan: free
+    healthCheckPath: /up
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        sync: false
+      - key: APP_KEY
+        sync: false
+      - key: DATABASE_URL
+        sync: false
