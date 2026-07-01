@@ -1,9 +1,11 @@
-FROM php:8.3-cli
+FROM php:8.3-fpm
 
-# Устанавливаем системные зависимости
+# Устанавливаем системные зависимости, nginx и supervisor
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    nginx \
+    supervisor \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -13,43 +15,39 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libicu-dev \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd intl zip
+    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd intl zip \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-# Копируем composer файлы
+# Копируем composer файлы и ставим зависимости
 COPY composer.json composer.lock ./
-
 ENV COMPOSER_MEMORY_LIMIT=-1
-
-# Устанавливаем PHP зависимости
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Копируем остальной код
 COPY . .
 
-# Выполняем скрипты Composer
 RUN composer run-script post-autoload-dump
 
-# Создаём папки и права
+# Права на storage и bootstrap/cache
 RUN mkdir -p storage/framework/sessions \
-    && mkdir -p storage/framework/views \
-    && mkdir -p storage/framework/cache \
-    && mkdir -p storage/logs \
-    && mkdir -p bootstrap/cache \
+    storage/framework/views \
+    storage/framework/cache \
+    storage/logs \
+    bootstrap/cache \
+    && chown -R www-data:www-data /app \
     && chmod -R 775 storage bootstrap/cache
+
+# Конфиги nginx и supervisor
+COPY docker/nginx.conf /etc/nginx/sites-available/default
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/start.sh /start.sh
+RUN chmod +x /start.sh
 
 EXPOSE 10000
 
-# Запускаем миграции и сервер
-CMD php artisan config:clear && \
-    php artisan route:clear && \
-    php artisan view:clear && \
-    php artisan cache:clear && \
-    php artisan migrate --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan serve --host=0.0.0.0 --port=$PORT
+CMD ["/start.sh"]
