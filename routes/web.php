@@ -89,7 +89,7 @@ Route::get('/debug-users-list/{secret}', function ($secret) {
 });
 
 Route::get('/make-me-admin/{secret}', function ($secret) {
-    if ($secret !== 'твой-секрет') {
+    if ($secret !== 'myrender2026xyz') {
         abort(404);
     }
     
