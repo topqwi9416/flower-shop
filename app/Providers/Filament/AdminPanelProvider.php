@@ -22,45 +22,41 @@ class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-    return $panel
-        ->default()
-        ->id('admin')
-        ->path('admin')
-        ->login()
-        ->colors([
-            'primary' => Color::Amber,
-        ])
-        ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
-        ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-        ->pages([
-            Pages\Dashboard::class,
-        ])
-        ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
-        ->widgets([
-            Widgets\AccountWidget::class,
-            Widgets\FilamentInfoWidget::class,
-        ])
-        ->middleware([
-            EncryptCookies::class,
-            AddQueuedCookiesToResponse::class,
-            StartSession::class,
-            AuthenticateSession::class,
-            ShareErrorsFromSession::class,
-            VerifyCsrfToken::class,
-            SubstituteBindings::class,
-            DisableBladeIconComponents::class,
-            DispatchServingFilamentEvent::class,
-        ])
-        ->authMiddleware([
-            Authenticate::class,
-        ])
-        // 👇 Добавляем ВСЕ необходимые CDN
-        ->renderHook(
-            'panels::head.start',
-            fn () => '
-                <script src="https://cdn.tailwindcss.com"></script>
-                <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-            '
-        );
+        return $panel
+            ->default()
+            ->id('admin')
+            ->path('admin')
+            ->login()
+            ->colors([
+                'primary' => Color::Amber,
+            ])
+            ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
+            ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
+            ->pages([
+                Pages\Dashboard::class,
+            ])
+            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
+            ->widgets([
+                Widgets\AccountWidget::class,
+                Widgets\FilamentInfoWidget::class,
+            ])
+            ->middleware([
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+            ])
+            ->authMiddleware([
+                Authenticate::class,
+            ])
+            ->renderHook(
+                'panels::head.start',
+                fn () => '<script src="https://cdn.tailwindcss.com"></script>'
+            );
     }
 }
