@@ -64,3 +64,18 @@ Route::get('/debug-filament', function () {
         ];
     }
 });
+
+Route::get('/debug-user-check', function () {
+    $user = \App\Models\User::where('email', 'твой@email.com')->first();
+    
+    if (!$user) {
+        return 'Пользователь не найден в БД';
+    }
+    
+    return [
+        'user' => $user->toArray(),
+        'canAccessPanel' => method_exists($user, 'canAccessPanel') 
+            ? $user->canAccessPanel(\Filament\Facades\Filament::getCurrentPanel() ?? \Filament\Facades\Filament::getPanel('admin'))
+            : 'метод не определён',
+    ];
+});
