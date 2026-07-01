@@ -6,12 +6,13 @@ RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
+    libzip-dev \
     zip \
     unzip \
     libpq-dev \
     libicu-dev \
     && docker-php-ext-configure intl \
-    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd intl
+    && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd intl zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
