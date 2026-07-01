@@ -79,3 +79,11 @@ Route::get('/debug-user-check', function () {
             : 'метод не определён',
     ];
 });
+
+Route::get('/debug-users-list/{secret}', function ($secret) {
+    if ($secret !== 'myrender2026xyz') {  // ← твоя произвольная строка
+        abort(404);
+    }
+    
+    return \App\Models\User::select('id', 'name', 'email')->get();
+});
