@@ -1,6 +1,6 @@
 FROM php:8.3-cli
 
-# Устанавливаем системные зависимости + Node.js для сборки ассетов
+# Устанавливаем системные зависимости
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -12,9 +12,6 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libpq-dev \
     libicu-dev \
-    curl \
-    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
     && docker-php-ext-configure intl \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd intl zip
 
@@ -30,12 +27,6 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 
 # Устанавливаем PHP зависимости
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
-
-# Копируем package.json и package-lock.json
-COPY package.json package-lock.json ./
-
-# Устанавливаем Node зависимости и собираем ассеты
-RUN npm install && npm run build
 
 # Копируем остальной код
 COPY . .
