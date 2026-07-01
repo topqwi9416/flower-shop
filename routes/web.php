@@ -116,3 +116,23 @@ Route::get('/debug-check-admin/{secret}', function ($secret) {
         'type' => gettype($user->is_admin),
     ];
 });
+
+Route::get('/debug-panel-check/{secret}', function ($secret) {
+    if ($secret !== 'myrender2026xyz') {
+        abort(404);
+    }
+    
+    if (!auth()->check()) {
+        return 'НЕ залогинен как веб-пользователь (auth()->check() = false)';
+    }
+    
+    $user = auth()->user();
+    $panel = \Filament\Facades\Filament::getPanel('admin');
+    
+    return [
+        'user_id' => $user->id,
+        'email' => $user->email,
+        'is_admin' => $user->is_admin,
+        'canAccessPanel' => $user->canAccessPanel($panel),
+    ];
+});
