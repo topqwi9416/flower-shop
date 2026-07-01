@@ -20,6 +20,8 @@ WORKDIR /app
 
 COPY composer.json composer.lock ./
 
+ENV COMPOSER_MEMORY_LIMIT=-1
+
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 COPY . .
@@ -33,6 +35,6 @@ RUN mkdir -p storage/framework/sessions \
     && mkdir -p bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-EXPOSE 8000
+EXPOSE 10000
 
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD php artisan serve --host=0.0.0.0 --port=10000
