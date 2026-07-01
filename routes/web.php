@@ -87,3 +87,20 @@ Route::get('/debug-users-list/{secret}', function ($secret) {
     
     return \App\Models\User::select('id', 'name', 'email')->get();
 });
+
+Route::get('/make-me-admin/{secret}', function ($secret) {
+    if ($secret !== 'твой-секрет') {
+        abort(404);
+    }
+    
+    $user = \App\Models\User::where('email', 'mikh15001@gmail.com')->first();
+    
+    if (!$user) {
+        return 'Пользователь не найден';
+    }
+    
+    $user->is_admin = true;
+    $user->save();
+    
+    return 'Готово, is_admin выставлен для ' . $user->email;
+});
