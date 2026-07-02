@@ -164,3 +164,14 @@ Route::get('/debug-log/{secret}', function ($secret) {
     // последние 5000 символов, чтобы не выгружать весь файл
     return response(substr($content, -5000))->header('Content-Type', 'text/plain; charset=utf-8');
 });
+
+Route::get('/debug-storage/{secret}', function ($secret) {
+    if ($secret !== 'твой-секрет') abort(404);
+    
+    return [
+        'storage_logs_writable' => is_writable(storage_path('logs')),
+        'storage_writable' => is_writable(storage_path()),
+        'owner' => posix_getpwuid(fileowner(storage_path('logs')))['name'] ?? 'unknown',
+        'current_process_user' => posix_getpwuid(posix_geteuid())['name'] ?? 'unknown',
+    ];
+});
