@@ -166,7 +166,7 @@ Route::get('/debug-log/{secret}', function ($secret) {
 });
 
 Route::get('/debug-storage/{secret}', function ($secret) {
-    if ($secret !== 'твой-секрет') abort(404);
+    if ($secret !== 'myrender2026xyz') abort(404);
     
     return [
         'storage_logs_writable' => is_writable(storage_path('logs')),
