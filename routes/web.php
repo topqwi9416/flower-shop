@@ -147,3 +147,20 @@ Route::get('/debug-routes/{secret}', function ($secret) {
     
     return $routes;
 });
+
+Route::get('/debug-log/{secret}', function ($secret) {
+    if ($secret !== 'myrender2026xyz') {
+        abort(404);
+    }
+    
+    $path = storage_path('logs/laravel.log');
+    
+    if (!file_exists($path)) {
+        return 'Файл лога не найден';
+    }
+    
+    $content = file_get_contents($path);
+    
+    // последние 5000 символов, чтобы не выгружать весь файл
+    return response(substr($content, -5000))->header('Content-Type', 'text/plain; charset=utf-8');
+});
